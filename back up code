@@ -1,0 +1,229 @@
+######BACKUP CODE 
+
+###Drammen
+morbi2009Drammen <- Morbi_Cost_2009[which(Morbi_Cost_2009$NAVN %in% c("Drammen")),]
+morbi2010Drammen <- Morbi_Cost_2010[which(Morbi_Cost_2010$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2011Drammen <- Morbi_Cost_2011[which(Morbi_Cost_2011$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2012Drammen <- Morbi_Cost_2012[which(Morbi_Cost_2012$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2013Drammen <- Morbi_Cost_2013[which(Morbi_Cost_2013$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2014Drammen <- Morbi_Cost_2014[which(Morbi_Cost_2014$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2015Drammen <- Morbi_Cost_2015[which(Morbi_Cost_2015$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2016Drammen <- Morbi_Cost_2016[which(Morbi_Cost_2016$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2017Drammen <- Morbi_Cost_2017[which(Morbi_Cost_2017$KOMMUNE_NAVN %in% c("Drammen")),]
+morbi2018Drammen <- Morbi_Cost_2018[which(Morbi_Cost_2018$KOMMUNE_NAVN %in% c("Drammen")),]
+DrammenMorbid <- rbind(morbi2009Drammen,morbi2010Drammen,morbi2011Drammen,morbi2012Drammen,morbi2013Drammen,
+morbi2016Drammen,morbi2017Drammen,morbi2018Drammen)
+Drammen_GP <- DrammenMorbid[which(DrammenMorbid$PRAKSISTYPE  %in% "Fastlege"),]
+Drammen_SP <- DrammenMorbid[which(DrammenMorbid$PRAKSISTYPE  %in% "Spesialist"),]
+Drammen_ER <- DrammenMorbid[which(DrammenMorbid$PRAKSISTYPE  %in% "Legevakt"),]
+ 
+ 
+#### for GP 
+morbDrammen <- Drammen_GP[,c(1,8,9,11:13)]
+names(morbDrammen) <- c("date", "gender","age","patient","govern","deductible")
+morbDrammen$gender <- as.factor(morbDrammen$gender)
+patternDrammen <- morbDrammen[,c(1:3)]
+bingrenDrammen <- morbDrammen[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenDrammen$date <- as.numeric(as.factor(bingrenDrammen$date))
+bingrenDrammen$patient <- as.numeric(as.factor(bingrenDrammen$patient))
+bingrenDrammen$deductible <- as.numeric(as.factor(bingrenDrammen$deductible))
+bingrenDrammen$govern <- as.numeric(as.factor(bingrenDrammen$govern))
+patiDrammen <- aggregate(bingrenDrammen,by=list(bingrenDrammen$date),FUN=sum)
+Drammen_GPCost <- patiDrammen[,3:5]
+dim(Drammen_GPCost)
+
+
+#### for SP 
+morbSPDrammen <- Drammen_SP[,c(1,8,9,11:13)]
+names(morbSPDrammen) <- c("date", "gender","age","patient","govern","deductible")
+morbSPDrammen$gender <- as.factor(morbSPDrammen$gender)
+patternSPDrammen <- morbSPDrammen[,c(1:3)]
+bingrenSPDrammen <- morbSPDrammen[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenSPDrammen$date <- as.numeric(as.factor(bingrenSPDrammen$date))
+bingrenSPDrammen$patient <- as.numeric(as.factor(bingrenSPDrammen$patient))
+bingrenSPDrammen$deductible <- as.numeric(as.factor(bingrenSPDrammen$deductible))
+bingrenSPDrammen$govern <- as.numeric(as.factor(bingrenSPDrammen$govern))
+patiSPDrammen <- aggregate(bingrenSPDrammen,by=list(bingrenSPDrammen$date),FUN=sum)
+DrammenSPCost <- patiSPDrammen[,3:5]
+
+
+#### for ER 
+morbDrammenER <- Drammen_ER[,c(1,8,9,11:13)]
+names(morbDrammenER) <- c("date", "gender","age","patient","govern","deductible")
+morbDrammenER$gender <- as.factor(morbDrammenER$gender)
+pattern <- morbDrammenER[,c(1:3)]
+bingrenDrammenER <- morbDrammenER[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenDrammenER$date <- as.numeric(as.factor(bingrenDrammenER$date))
+bingrenDrammenER$patient <- as.numeric(as.factor(bingrenDrammenER$patient))
+bingrenDrammenER$deductible <- as.numeric(as.factor(bingrenDrammenER$deductible))
+bingrenDrammenER$govern <- as.numeric(as.factor(bingrenDrammenER$govern))
+patibingrenDrammenER <- aggregate(bingrenDrammenER,by=list(bingrenDrammenER$date),FUN=sum)
+DrammenERCost <- patibingrenDrammenER[,3:5]
+
+
+ 
+
+
+###Fredrikstad
+
+###Fredrikstad
+morbi2009Fre <- Morbi_Cost_2009[which(Morbi_Cost_2009$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2010Fre <- Morbi_Cost_2010[which(Morbi_Cost_2010$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2011Fre <- Morbi_Cost_2011[which(Morbi_Cost_2011$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2012Fre <- Morbi_Cost_2012[which(Morbi_Cost_2012$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2013Fre <- Morbi_Cost_2013[which(Morbi_Cost_2013$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2014Fre <- Morbi_Cost_2014[which(Morbi_Cost_2014$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2015Fre <- Morbi_Cost_2015[which(Morbi_Cost_2015$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2016Fre <- Morbi_Cost_2016[which(Morbi_Cost_2016$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2017Fre <- Morbi_Cost_2017[which(Morbi_Cost_2017$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+morbi2018Fre <- Morbi_Cost_2018[which(Morbi_Cost_2018$KOMMUNE_NAVN %in% c("Fredrikstad")),]
+FreMorbid <- rbind(morbi2009Fre,morbi2010Fre,morbi2011Fre,morbi2012Fre,
+morbi2013Fre,morbi2014Fre,morbi2015Fre,
+morbi2016Fre,morbi2017Fre,morbi2018Fre)
+
+Fre_GP <- FreMorbid[which(FreMorbid$PRAKSISTYPE  %in% "Fastlege"),]
+Fre_SP <- FreMorbid[which(FreMorbid$PRAKSISTYPE  %in% "Spesialist"),]
+Fre_ER <- FreMorbid[which(FreMorbid$PRAKSISTYPE  %in% "Legevakt"),]
+
+#### for GP 
+Fre_GP <- Fre_GP[,c(1,8,9,11:13)]
+names(Fre_GP) <- c("date", "gender","age","patient","govern","deductible")
+Fre_GP$gender <- as.factor(Fre_GP$gender)
+patternFre <- Fre_GP[,c(1:3)]
+bingrenFre <- Fre_GP[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenFre$date <- as.numeric(as.factor(bingrenFre$date))
+bingrenFre$patient <- as.numeric(as.factor(bingrenFre$patient))
+bingrenFre$deductible <- as.numeric(as.factor(bingrenFre$deductible))
+bingrenFre$govern <- as.numeric(as.factor(bingrenFre$govern))
+patiFre <- aggregate(bingrenFre,by=list(bingrenFre$date),FUN=sum)
+FreGPCost <- patiFre[,3:5]
+
+
+#### for SP 
+Fre_SP <- Fre_SP[,c(1,8,9,11:13)]
+names(Fre_SP) <- c("date", "gender","age","patient","govern","deductible")
+Fre_SP$gender <- as.factor(Fre_SP$gender)
+patternSPFre <- Fre_SP[,c(1:3)]
+bingrenSPFre <- Fre_SP[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenSPFre$date <- as.numeric(as.factor(bingrenSPFre$date))
+bingrenSPFre$patient <- as.numeric(as.factor(bingrenSPFre$patient))
+bingrenSPFre$deductible <- as.numeric(as.factor(bingrenSPFre$deductible))
+bingrenSPFre$govern <- as.numeric(as.factor(bingrenSPFre$govern))
+patiSPFre <- aggregate(bingrenSPFre,by=list(bingrenSPFre$date),FUN=sum)
+FreSPCost <- patiSPOslo[,3:5]
+
+
+#### for ER 
+Fre_ER <- Fre_ER[,c(1,8,9,11:13)]
+names(Fre_ER) <- c("date", "gender","age","patient","govern","deductible")
+Fre_ER$gender <- as.factor(Fre_ER$gender)
+pattern <- Fre_ER[,c(1:3)]
+bingrenFreER <- Fre_ER[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenFreER$date <- as.numeric(as.factor(bingrenFreER$date))
+bingrenFreER$patient <- as.numeric(as.factor(bingrenFreER$patient))
+bingrenFreER$deductible <- as.numeric(as.factor(bingrenFreER$deductible))
+bingrenFreER$govern <- as.numeric(as.factor(bingrenFreER$govern))
+patibingrenFreER <- aggregate(bingrenFreER,by=list(bingrenFreER$date),FUN=sum)
+FreERCost <- patibingrenFreER[,3:5]
+
+
+
+###Tromsø
+morbi2009Tromsø <- Morbi_Cost_2009[which(Morbi_Cost_2009$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2010Tromsø <- Morbi_Cost_2010[which(Morbi_Cost_2010$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2011Tromsø <- Morbi_Cost_2011[which(Morbi_Cost_2011$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2012Tromsø <- Morbi_Cost_2012[which(Morbi_Cost_2012$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2013Tromsø <- Morbi_Cost_2013[which(Morbi_Cost_2013$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2014Tromsø <- Morbi_Cost_2014[which(Morbi_Cost_2014$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2015Tromsø <- Morbi_Cost_2015[which(Morbi_Cost_2015$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2016Tromsø <- Morbi_Cost_2016[which(Morbi_Cost_2016$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2017Tromsø <- Morbi_Cost_2017[which(Morbi_Cost_2017$KOMMUNE_NAVN %in% c("Tromsø")),]
+morbi2018Tromsø <- Morbi_Cost_2018[which(Morbi_Cost_2018$KOMMUNE_NAVN %in% c("Tromsø")),]
+TromsøMorbid <- rbind(morbi2009Tromsø,morbi2010Tromsø,morbi2011Tromsø,morbi2012Tromsø,morbi2013Tromsø,
+morbi2014Tromsø,morbi2015Tromsø,
+morbi2016Tromsø,morbi2017Tromsø,morbi2018Tromsø)
+
+
+Tro_GP <- TromsøMorbid[which(TromsøMorbid$PRAKSISTYPE  %in% "Fastlege"),]
+Tro_SP <- TromsøMorbid[which(TromsøMorbid$PRAKSISTYPE  %in% "Spesialist"),]
+Tro_ER <- TromsøMorbid[which(TromsøMorbid$PRAKSISTYPE  %in% "Legevakt"),]
+
+#### for GP 
+Tro_GP <- Tro_GP[,c(1,8,9,11:13)]
+names(Tro_GP) <- c("date", "gender","age","patient","govern","deductible")
+Tro_GP$gender <- as.factor(Tro_GP$gender)
+patternTro <- Tro_GP[,c(1:3)]
+bingrenTro <- Tro_GP[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenTro$date <- as.numeric(as.factor(bingrenTro$date))
+bingrenTro$patient <- as.numeric(as.factor(bingrenTro$patient))
+bingrenTro$deductible <- as.numeric(as.factor(bingrenTro$deductible))
+bingrenTro$govern <- as.numeric(as.factor(bingrenTro$govern))
+patiTro <- aggregate(bingrenTro,by=list(bingrenTro$date),FUN=sum)
+TroGPCost <- patiTro[,3:5]
+
+
+#### for SP 
+Tro_SP <- Tro_SP[,c(1,8,9,11:13)]
+names(Tro_SP) <- c("date", "gender","age","patient","govern","deductible")
+Tro_SP$gender <- as.factor(Tro_SP$gender)
+patternSPTro <- Tro_SP[,c(1:3)]
+bingrenSPTro <- Tro_SP[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenSPTro$date <- as.numeric(as.factor(bingrenSPTro$date))
+bingrenSPTro$patient <- as.numeric(as.factor(bingrenSPTro$patient))
+bingrenSPTro$deductible <- as.numeric(as.factor(bingrenSPTro$deductible))
+bingrenSPTro$govern <- as.numeric(as.factor(bingrenSPTro$govern))
+patiSPTro <- aggregate(bingrenSPTro,by=list(bingrenSPTro$date),FUN=sum)
+TroSPCost <- patiSPTro[,3:5]
+
+
+#### for ER 
+Tro_ER <- Tro_ER[,c(1,8,9,11:13)]
+names(Tro_ER) <- c("date", "gender","age","patient","govern","deductible")
+Tro_ER$gender <- as.factor(Tro_ER$gender)
+pattern <- Tro_ER[,c(1:3)]
+bingrenTroER <- Tro_ER[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenTroER$date <- as.numeric(as.factor(bingrenTroER$date))
+bingrenTroER$patient <- as.numeric(as.factor(bingrenTroER$patient))
+bingrenTroER$deductible <- as.numeric(as.factor(bingrenTroER$deductible))
+bingrenTroER$govern <- as.numeric(as.factor(bingrenTroER$govern))
+TromER <- aggregate(bingrenTroER,by=list(bingrenTroER$date),FUN=sum)
+TroERCost <- TromER[,3:5]
+
+
+
+
+
+
+
+dim(OsloGPCost)
+dim(OsloSPCost)
+dim(OsloERCost)
+dim(Drammen_GPCost)
+dim(DrammenSPCost)
+dim(DrammenERCost)
+dim(FreGPCost)
+dim(FreSPCost)
+dim(FreERCost)
+dim(TroGPCost)
+dim(TroSPCost)
+dim(TroERCost)
+
+
+
+
+morbidCost <- rbind(OsloMorbid,DrammenMorbid,FredrikstadMorbid,TromsøMorbid)
+
+
+
