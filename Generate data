@@ -126,6 +126,111 @@ write.table(OsloALL,file="OsloALL.csv"，quote=F,sep=";",row.names=F)
 write.table(mortal,file="mortal.csv"，quote=F,sep=";",row.names=F)
 
 
+#### RF COST######
+set.seed(1234)
+library(randomForest)
+cost.rf <- randomForest(CluData$govern~.,data=CluData,mtry=3,importance=TRUE,proximity=TRUE)
+ 
+getTree(cost.rf,1,labelVar=TRUE)
+round(importance(cost.rf),2)
+varImpPlot(cost.rf)
+ 
+### do PCoA/MDS on 1-proximity:
+Oslo.mds = cmdscale(1-cost.rf$proximity,eig = TRUE)
+pred <- as.numeric(predict(Oslo.rf,CluData,type="response"))
+rocmu <- multiclass.roc(CluData$patientNum,pred)
+auc(rocmu)
+rsmorb <- rocmu[["rocs"]]
+plot.roc(rsmorb[[1]])
+sapply(2:length(rsmorb),function(i)lines.roc(rsmorb[[i]],col=i))
+ggVarImpPlot(importance(Oslo.rf))
+### K means######
+CluData <- Morbi_Po[,c(2:5,9:11)]
+set.seed(12345)
+library(ggplot2)
+library(factoextra)
+fviz_nbclust(CluData,kmeans,method="slihouette")
+CluR <- kmeans (x=CluData,centers=2,iter.max = 10,nstart = 50)
+fviz_cluster(CluR,CluData,ellipse.type="norm")
+CluR$cluster
+CluR$size
+CluR$centers
+library(pROC)
+library(kknn)
+set.seed(12345)
+index <- sort(sample(nrow(CluData),nrow(data2)*.7))
+train_data <- CluData[index,]
+test_data <- CluData[-index,]
+wine_knn <- kknn(CluData$govern~.,train_data,test_data,k=7,distance=2)
+pre_knn <- fitted(wine_knn)
+predic <- as.numeric(pre_knn)
+table(test_data$govern,pre_knn,dnn=c("Actual value","Predicitve value"))
+knn_mulroc <- multiclass.roc(test_data$govern,as.numeric(pre_knn))
+auc(knn_mulroc)
+rsknn <- knn_mulroc[["roc"]]
+plot.roc(rsknn[[1]])
+sapply(2:length(rsknn), function(i)lines.roc(rsknn[[i]]),col=i)))
+##### descriptive statistics ,use 2019 data 
+setwd()
+dim(morbi2019)
+Morbi_Cost_2019=read.table("2019 Data fra KUHR.dsv",header = T,sep = ";")
+morbi2019 <- Morbi_Cost_2019[Morbi_Cost_2019$NAVN=="Oslo",]
+#morb2019 <- morbi2019[c(morbi2019$PRAKSISTYPE != "Fastlege),]
+morb19 <- morbi2019[,c(1,2,8,9,11:13)]
+names(morb19) <- c("date","drType","gender","age","patient","govern","deductible")
+morb19$gender <- as.numeric(as.factor(morb19$gender))
+morb19$govern <- as.numeric(as.factor(morb19$govern))
+morb19$deductible <- as.numeric(as.factor(morb19$deductible))
+morb19$patient <- as.numeric(as.factor(morb19$patient))
+morb19$drType <- as.numeric(as.factor(morb19$drType))
+w<- morb19
+summary(w)
+str(w)
+quantile(w[,5:7],probs=seq(0,1,0.2),na.rm=TRUE)
+library(pastecs)
+stat.desc(w)
+library(psych)
+describe(w)
+morbidity2019 <- morb19
+hist(morbidity2019$deductible,freq =FALSE)
+lines(density(morb19$deductible),col="blue")
+range(morb19$deductible)
+##########
+plot(ecdf(w$deductible),verticals=TRUE,do.p=FALSE)
+x <-44:78
+lines(x,pnorm(x,mean(w$deductible),sd(w$deductible)))
+######
+qqnorm(w$deductible);qqline(w$deductible)
+#####
+shapiro.test(w$deductible)
+####
+data222 <- w[,c(5:7)]
+resu <- data222
+for (i in 1:ncol(data222)){
+  df <- ((data222[,i]-min(data222[,i]))/(max(data222[,i])-min(data222[,i])))
+  resu[,i]<- as.data.frame(df)
+}
+head(resu)
+w <- data222
+boxplot(w,main="Morbidity and Cost Data",xlab="Varaibles",ylab="Variable range")
+coplot(w$deductible ~w$govern |w$patient)
+plot(w$decutible ~ w$govern + w$patient)
+plot( ~ w$govern + w$patient+w$decutible)
+pairs(~ w$govern + w$patient+w$decutible,data=w,main="basic scatterplot matrix")
+library(car)
+scatterplotMatrix( ~ govern + patient,data=w,lty.smooth=2,main="Government payments and number of patients")
+par(mfrow=c(1,2))
+hist(w$govern)
+hist(w$deductible)
+w <- morb19
+library(lattice)
+xyplot(deductible  ~ govern |age,data=w,layout=c(4,1))
+xyplot(deductible  ~ govern |drType,data=w,layout=c(3,1))
+###### Done
+
+
+
+
 
 
 
