@@ -2,7 +2,7 @@
 ######################################################################
 #### select mortality and temperature data     #######################
 #### from 2009 to 2018                         #######################
-#### oslo,bergen,trondheim, stavanger,fredrikstad,tromso##############
+#### Oslo,bergen,trondheim, stavanger,fredrikstad,tromso##############
 ######################################################################
 setwd("")
 data <- read.table("dataset_n_cp_mortality_by_age.csv",header=T,sep=",")
