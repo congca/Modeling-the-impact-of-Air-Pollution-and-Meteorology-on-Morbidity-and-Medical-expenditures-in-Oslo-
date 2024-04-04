@@ -1,7 +1,7 @@
 ####### 20.09.2022 Cong Cao #######
 ######################################################################
 #### select mortality and temperature data     #######################
-#### from 2009 to 2018,for 7 cities,include    #######################
+#### from 2009 to 2018                         #######################
 #### oslo,bergen,trondheim, stavanger,fredrikstad,tromso##############
 ######################################################################
 setwd("")
@@ -14,7 +14,7 @@ Oslo <- subset[4750:8401,]
 Bergen <- subsetBergen[4750:8401,]
 Trondheim <- subsetTrondheim[4750:8401,]
 Tromsø <- subsetTromsø[4750:8401,]
-###### Here we get the tempertature and mortality dataset 
+###### Here we get the temperature and mortality dataset ######
 tempMortali <- rbind(Oslo,Bergen,Trondheim,Tromsø)
 morta <- tempMortali[-14608,]
 evri <- read.csv("weather and pollution data.csv,header=T,sep=";")
@@ -23,7 +23,7 @@ mortal <- death[,c(3,5,8:33)]
 mortalOslo <- mortal[which(mortal$county_name %in% c("Oslo")),]
 ######################################################################
 #### select mobidity and cost data             #######################
-#### from 2009 to 2018,for 7 cities,include    #######################
+#### from 2009 to 2018                         #######################
 #### oslo,drammen,fredrikstad,tromso           #######################
 ######################################################################
 Morbi_Cost_2009=read.table("2009 Data fra KUHR.dsv",header = T,sep = ";")
@@ -86,7 +86,7 @@ OsloSPCost <- patiSPOslo[,3:5]
 
 #### for ER 
 morbOsloER <- morbiOslo_ER[,c(1,8,9,11:13)]
-names(morbOsloER) <- c("date", "gender","age","patient","govern","deductible")
+names(morbOsloER) <- c("date", "gender", "age", "patient", "govern","deductible")
 morbOsloER$gender <- as.factor(morbOsloER$gender)
 pattern <- morbOsloER[,c(1:3)]
 bingrenOsloER <- morbOsloER[,c(1,4:6)]
@@ -99,7 +99,7 @@ bingrenOsloER$govern <- as.numeric(as.factor(bingrenOsloER$govern))
 patibingrenOsloER <- aggregate(bingrenOsloER,by=list(bingrenOsloER$date),FUN=sum)
 OsloERCost <- patibingrenOsloER[,3:5]
 
-### for totall
+### for total######
 morbAll <- OsloMorbid[,c(1,8,9,11:13)]
 names(morbAll) <- c("date", "gender","age","patient","govern","deductible")
 morbAll$gender <- as.factor(morbAll$gender)
@@ -119,7 +119,7 @@ OsloER <- cbind(Oslo[,2],OsloERCost,mortalOslo,evriOslo)
 OsloGP <- cbind(Oslo[-3652,2],OsloGPCost,mortalOslo[-3652,],evriOslo)
 OsloALL <- cbind(Oslo[,2],OsloALLCost,mortalOslo,evriOslo)
 mortal <- mortal[,-1]
-### so we get four dataset 
+### so we get four dataset ######
 write.table(OsloGP,file="OsloGP.csv"，quote=F,sep=";",row.names=F)
 write.table(OsloER,file="OsloER.csv"，quote=F,sep=";",row.names=F)
 write.table(OsloALL,file="OsloALL.csv"，quote=F,sep=";",row.names=F)
