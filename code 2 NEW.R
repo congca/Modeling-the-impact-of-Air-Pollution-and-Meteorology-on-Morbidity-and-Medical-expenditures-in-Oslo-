@@ -1,0 +1,154 @@
+################################################
+#### Morbidity Cost (Oslo)          ############
+################################################
+##select the Oslo data as a subset,2006######
+Morbi_Cost_2006=read.table("2006 Data fra KUHR.dsv",header = T,sep = ";")
+morbi2006 <- Morbi_Cost_2006[Morbi_Cost_2006$NAVN =="Oslo",]
+morbi2006 <- morbi2006[c(morbi2006$PRAKSISTYPE !="Fastlege"),]
+morb06 <- morbi2006[,c(1,2,8,9,11:13)]
+names(morb06) <- c("date","drType","gender","age","patient","govern","deductible")
+morb06$gender <- as.factor(morb06$gender)
+pattern <- morb06[,c(1:4)]
+bingren <- morb06[,c(1,5:7)]
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati06 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+
+### aggregate the patient number by date ####
+Morbi_Cost_2007 = read.table("2007 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2007[Morbi_Cost_2007$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati07 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2008 = read.table("2008 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2008[Morbi_Cost_2008$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati08 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2009 = read.table("2009 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2009[Morbi_Cost_2009$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati09 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2010 = read.table("2010 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2010[Morbi_Cost_2010$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati10 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2011 = read.table("2011 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2011[Morbi_Cost_2011$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati11 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2012 = read.table("2012 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2012[Morbi_Cost_2012$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati12 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2013 = read.table("2013 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2013[Morbi_Cost_2013$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati13 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2014 = read.table("2014 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2014[Morbi_Cost_2014$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati14 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2015 = read.table("2015 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2015[Morbi_Cost_2015$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati15 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2016 = read.table("2016 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2016[Morbi_Cost_2016$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati16 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2017 = read.table("2017 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2017[Morbi_Cost_2017$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati17 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#######
+Morbi_Cost_2018 = read.table("2018 Data fra KUHR.dsv",header = T,sep = ";")
+morb  <- Morbi_Cost_2018[Morbi_Cost_2018$NAVN =="Oslo",]
+morb <- morb[c(morb$PRAKSISTYPE !="Fastlege"),]
+bingren <- morb[,c(1,11:13)]
+names(bingren) <- c("date","patient","govern","deductible")
+bingren$date <- as.numeric(as.factor(bingren$date))
+bingren$patient <- as.numeric(as.factor(bingren$patient))
+bingren$deductible <- as.numeric(as.factor(bingren$deductible))
+bingren$govern <- as.numeric(as.factor(bingren$govern))
+pati18 <- aggregate(bingren,by=list(bingren$date),FUN=sum)
+#########
+newmorb <- rbind(pati06,pati07,pati08,pati09,pati10,pati11,pati12,pati13,pati14,pati14,pati15,pati16,pati17,pati18)
+dim(newmorb)
+###Done####

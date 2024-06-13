@@ -1,0 +1,252 @@
+####### 20.09.2022 Cong Cao #######
+######################################################################
+#### select mortality and temperature data     #######################
+#### from 2009 to 2018                         #######################
+#### Oslo,bergen,trondheim, stavanger,fredrikstad,tromso##############
+######################################################################
+setwd("")
+data <- read.table("dataset_n_cp_mortality_by_age.csv",header=T,sep=",")
+subset <- data[which(data$municipality_name %in% "Oslo"),]
+subsetBergen <- data[which(data$municipality_name %in% "Bergen"),]
+subsetTrondheim <- data[which(data$municipality_name %in% "Trondheim"),]
+subsetTromso <-    data[which(data$municipality_name %in% "Tromso"),]
+Oslo <- subset[4750:8401,]
+Bergen <- subsetBergen[4750:8401,]
+Trondheim <- subsetTrondheim[4750:8401,]
+Tromso <- subsetTromso[4750:8401,]
+###### Here we get the temperature and mortality dataset ######
+tempMortali <- rbind(Oslo,Bergen,Trondheim,Tromso)
+morta <- tempMortali[-14608,]
+evri <- read.csv("weather and pollution data.csv",header=T,sep=";")
+death <- cbind(morta,evri)
+mortal <- death[,c(3,5,8:33)]
+mortalOslo <- mortal[which(mortal$county_name %in% c("Oslo")),]
+######################################################################
+#### select mobidity and cost data             #######################
+#### from 2009 to 2018                         #######################
+#### oslo,drammen,fredrikstad,tromso           #######################
+######################################################################
+Morbi_Cost_2009=read.table("2009 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2010=read.table("2010 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2011=read.table("2011 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2012=read.table("2012 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2013=read.table("2013 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2014=read.table("2014 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2015=read.table("2015 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2016=read.table("2016 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2017=read.table("2017 Data fra KUHR.dsv",header = T,sep = ";")
+Morbi_Cost_2018=read.table("2018 Data fra KUHR.dsv",header = T,sep = ";")
+
+###Oslo
+morbi2009Oslo <- Morbi_Cost_2009[which(Morbi_Cost_2009$NAVN %in% c("Oslo")),]
+morbi2010Oslo <- Morbi_Cost_2010[which(Morbi_Cost_2010$NAVN %in% c("Oslo")),]
+morbi2011Oslo <- Morbi_Cost_2011[which(Morbi_Cost_2011$NAVN %in% c("Oslo")),]
+morbi2012Oslo <- Morbi_Cost_2012[which(Morbi_Cost_2012$NAVN %in% c("Oslo")),]
+morbi2013Oslo <- Morbi_Cost_2013[which(Morbi_Cost_2013$NAVN %in% c("Oslo")),]
+morbi2014Oslo <- Morbi_Cost_2014[which(Morbi_Cost_2014$NAVN %in% c("Oslo")),]
+morbi2015Oslo <- Morbi_Cost_2015[which(Morbi_Cost_2015$NAVN %in% c("Oslo")),]
+morbi2016Oslo <- Morbi_Cost_2016[which(Morbi_Cost_2016$NAVN %in% c("Oslo")),]
+morbi2017Oslo <- Morbi_Cost_2017[which(Morbi_Cost_2017$NAVN %in% c("Oslo")),]
+morbi2018Oslo <- Morbi_Cost_2018[which(Morbi_Cost_2018$NAVN %in% c("Oslo")),]
+OsloMorbid <- rbind(morbi2009Oslo,morbi2010Oslo,morbi2011Oslo,morbi2012Oslo,morbi2013Oslo,
+morbi2014Oslo,morbi2015Oslo,morbi2016Oslo,morbi2017Oslo,morbi2018Oslo)
+
+morbiOslo_GP <- OsloMorbid[which(OsloMorbid$PRAKSISTYPE  %in% "Fastlege"),]
+morbiOslo_SP <- OsloMorbid[which(OsloMorbid$PRAKSISTYPE  %in% "Spesialist"),]
+morbiOslo_ER <- OsloMorbid[which(OsloMorbid$PRAKSISTYPE  %in% "Legevakt"),]
+
+#### for GP 
+morbOslo <- morbiOslo_GP[,c(1,8,9,11:13)]
+names(morbOslo) <- c("date", "gender","age","patient","govern","deductible")
+morbOslo$gender <- as.factor(morbOslo$gender)
+patternOslo <- morbOslo[,c(1:3)]
+bingrenOslo <- morbOslo[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenOslo$date <- as.numeric(as.factor(bingrenOslo$date))
+bingrenOslo$patient <- as.numeric(as.factor(bingrenOslo$patient))
+bingrenOslo$deductible <- as.numeric(as.factor(bingrenOslo$deductible))
+bingrenOslo$govern <- as.numeric(as.factor(bingrenOslo$govern))
+patiOslo <- aggregate(bingrenOslo,by=list(bingrenOslo$date),FUN=sum)
+# patternOslo$date <- as.numeric(as.factor(patternOslo$date))
+# patternOslo$gender <- as.numeric(as.factor(patternOslo$gender))
+# patternOslo$age <- as.numeric(as.factor(patternOslo$age))
+# ternGPOslo <- aggregate(patternOslo,by=list(patternOslo$date),FUN=sum)
+OsloGPCost <- patiOslo[,3:5]
+dim(OsloGPCost)
+ 
+
+#### for SP 
+morbSPOslo <- morbiOslo_SP[,c(1,8,9,11:13)]
+names(morbSPOslo) <- c("date", "gender","age","patient","govern","deductible")
+morbSPOslo$gender <- as.factor(morbSPOslo$gender)
+patternSPOslo <- morbSPOslo[,c(1:3)]
+bingrenSPOslo <- morbSPOslo[,c(1,4:6)]
+### aggregate the patient number by date ####
+bingrenSPOslo$date <- as.numeric(as.factor(bingrenSPOslo$date))
+bingrenSPOslo$patient <- as.numeric(as.factor(bingrenSPOslo$patient))
+bingrenSPOslo$deductible <- as.numeric(as.factor(bingrenSPOslo$deductible))
+bingrenSPOslo$govern <- as.numeric(as.factor(bingrenSPOslo$govern))
+patiSPOslo <- aggregate(bingrenSPOslo,by=list(bingrenSPOslo$date),FUN=sum)
+
+OsloSPCost <- patiSPOslo[,3:5]
+#### for ER 
+morbOsloER <- morbiOslo_ER[,c(1,8,9,11:13)]
+names(morbOsloER) <- c("date", "gender", "age", "patient", "govern","deductible")
+morbOsloER$gender <- as.factor(morbOsloER$gender)
+pattern <- morbOsloER[,c(1:3)]
+bingrenOsloER <- morbOsloER[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenOsloER$date <- as.numeric(as.factor(bingrenOsloER$date))
+bingrenOsloER$patient <- as.numeric(as.factor(bingrenOsloER$patient))
+bingrenOsloER$deductible <- as.numeric(as.factor(bingrenOsloER$deductible))
+bingrenOsloER$govern <- as.numeric(as.factor(bingrenOsloER$govern))
+patibingrenOsloER <- aggregate(bingrenOsloER,by=list(bingrenOsloER$date),FUN=sum)
+OsloERCost <- patibingrenOsloER[,3:5]
+
+### for total######
+morbAll <- OsloMorbid[,c(1,8,9,11:13)]
+names(morbAll) <- c("date", "gender","age","patient","govern","deductible")
+morbAll$gender <- as.factor(morbAll$gender)
+pattern <- morbAll[,c(1:3)]
+bingrenALL <- morbAll[,c(1,4:6)]
+
+### aggregate the patient number by date ####
+bingrenALL$date <- as.numeric(as.factor(bingrenALL$date))
+bingrenALL$patient <- as.numeric(as.factor(bingrenALL$patient))
+bingrenALL$deductible <- as.numeric(as.factor(bingrenALL$deductible))
+bingrenALL$govern <- as.numeric(as.factor(bingrenALL$govern))
+patibingrenALL <- aggregate(bingrenALL,by=list(bingrenALL$date),FUN=sum)
+ALLCost <- patibingrenALL[,3:5]
+ 
+library(readxl)
+evriOslo <- read_excel("Oslo.xlsx",sheet=1)
+OsloER <- cbind(Oslo[,2],OsloERCost,evriOslo)
+OsloGP <- cbind(Oslo[-3652,2],OsloGPCost,evriOslo[-3652,])
+OsloALL <- cbind(Oslo[,2],OsloALLCost,mortalOslo,evriOslo)
+mortal <- mortal[,-1]
+### so we get four dataset ######
+write.table(OsloGP,"OsloGP.csv",quote=F,sep=";",row.names=F)
+write.table(OsloER,"OsloER.csv",quote=F,sep=";",row.names=F)
+write.table(OsloALL,file="OsloALL.csv",quote=F,sep=";",row.names=F)
+write.table(mortal,file="mortal.csv",quote=F,sep=";",row.names=F)
+
+###Done for now
+
+
+
+
+
+#### RF COST######
+set.seed(1234)
+library(randomForest)
+cost.rf <- randomForest(CluData$govern~.,data=CluData,mtry=3,importance=TRUE,proximity=TRUE)
+ 
+getTree(cost.rf,1,labelVar=TRUE)
+round(importance(cost.rf),2)
+varImpPlot(cost.rf)
+ 
+### do PCoA/MDS on 1-proximity:
+Oslo.mds = cmdscale(1-cost.rf$proximity,eig = TRUE)
+pred <- as.numeric(predict(Oslo.rf,CluData,type="response"))
+rocmu <- multiclass.roc(CluData$patientNum,pred)
+auc(rocmu)
+rsmorb <- rocmu[["rocs"]]
+plot.roc(rsmorb[[1]])
+sapply(2:length(rsmorb),function(i)lines.roc(rsmorb[[i]],col=i))
+ggVarImpPlot(importance(Oslo.rf))
+### K means######
+CluData <- Morbi_Po[,c(2:5,9:11)]
+set.seed(12345)
+library(ggplot2)
+library(factoextra)
+fviz_nbclust(CluData,kmeans,method="slihouette")
+CluR <- kmeans (x=CluData,centers=2,iter.max = 10,nstart = 50)
+fviz_cluster(CluR,CluData,ellipse.type="norm")
+CluR$cluster
+CluR$size
+CluR$centers
+library(pROC)
+library(kknn)
+set.seed(12345)
+index <- sort(sample(nrow(CluData),nrow(data2)*.7))
+train_data <- CluData[index,]
+test_data <- CluData[-index,]
+wine_knn <- kknn(CluData$govern~.,train_data,test_data,k=7,distance=2)
+pre_knn <- fitted(wine_knn)
+predic <- as.numeric(pre_knn)
+table(test_data$govern,pre_knn,dnn=c("Actual value","Predicitve value"))
+knn_mulroc <- multiclass.roc(test_data$govern,as.numeric(pre_knn))
+auc(knn_mulroc)
+rsknn <- knn_mulroc[["roc"]]
+plot.roc(rsknn[[1]])
+sapply(2:length(rsknn), function(i)lines.roc(rsknn[[i]]),col=i)))
+##### descriptive statistics ,use 2019 data 
+setwd()
+dim(morbi2019)
+Morbi_Cost_2019=read.table("2019 Data fra KUHR.dsv",header = T,sep = ";")
+morbi2019 <- Morbi_Cost_2019[Morbi_Cost_2019$NAVN=="Oslo",]
+#morb2019 <- morbi2019[c(morbi2019$PRAKSISTYPE != "Fastlege),]
+morb19 <- morbi2019[,c(1,2,8,9,11:13)]
+names(morb19) <- c("date","drType","gender","age","patient","govern","deductible")
+morb19$gender <- as.numeric(as.factor(morb19$gender))
+morb19$govern <- as.numeric(as.factor(morb19$govern))
+morb19$deductible <- as.numeric(as.factor(morb19$deductible))
+morb19$patient <- as.numeric(as.factor(morb19$patient))
+morb19$drType <- as.numeric(as.factor(morb19$drType))
+w<- morb19
+summary(w)
+str(w)
+quantile(w[,5:7],probs=seq(0,1,0.2),na.rm=TRUE)
+library(pastecs)
+stat.desc(w)
+library(psych)
+describe(w)
+morbidity2019 <- morb19
+hist(morbidity2019$deductible,freq =FALSE)
+lines(density(morb19$deductible),col="blue")
+range(morb19$deductible)
+##########
+plot(ecdf(w$deductible),verticals=TRUE,do.p=FALSE)
+x <-44:78
+lines(x,pnorm(x,mean(w$deductible),sd(w$deductible)))
+######
+qqnorm(w$deductible);qqline(w$deductible)
+#####
+shapiro.test(w$deductible)
+####
+data222 <- w[,c(5:7)]
+resu <- data222
+for (i in 1:ncol(data222)){
+  df <- ((data222[,i]-min(data222[,i]))/(max(data222[,i])-min(data222[,i])))
+  resu[,i]<- as.data.frame(df)
+}
+head(resu)
+w <- data222
+boxplot(w,main="Morbidity and Cost Data",xlab="Varaibles",ylab="Variable range")
+coplot(w$deductible ~w$govern |w$patient)
+plot(w$decutible ~ w$govern + w$patient)
+plot( ~ w$govern + w$patient+w$decutible)
+pairs(~ w$govern + w$patient+w$decutible,data=w,main="basic scatterplot matrix")
+library(car)
+scatterplotMatrix( ~ govern + patient,data=w,lty.smooth=2,main="Government payments and number of patients")
+par(mfrow=c(1,2))
+hist(w$govern)
+hist(w$deductible)
+w <- morb19
+library(lattice)
+xyplot(deductible  ~ govern |age,data=w,layout=c(4,1))
+xyplot(deductible  ~ govern |drType,data=w,layout=c(3,1))
+###### Done
+
+
+
+
+
+
+
+
+
+
+
